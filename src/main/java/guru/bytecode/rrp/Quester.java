@@ -10,7 +10,10 @@ class Quester {
     List<Move> findRoute(Room startingRoom, Set<Item> itemsToCollect) {
         Objects.requireNonNull(startingRoom);
         Objects.requireNonNull(itemsToCollect);
-        return Collections.singletonList(new Move());
+        startingRoom.getItems();
+        return itemsToCollect.isEmpty()
+                ? Collections.singletonList(new Move())
+                : Collections.emptyList();
     }
 
 }
