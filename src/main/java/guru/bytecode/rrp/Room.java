@@ -8,4 +8,8 @@ class Room {
         return null;
     }
     
+    Set<Room> getNeighbors() {
+        return null;
+    }
+    
 }
