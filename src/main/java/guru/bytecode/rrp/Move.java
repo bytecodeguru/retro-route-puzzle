@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Set;
 
 class Move {
-    
+
     private final Room room;
     private final Set<Item> collectedItems;
 
@@ -15,11 +15,15 @@ class Move {
         this.collectedItems = collectedItems;
     }
 
+    Room getRoom() {
+        return room;
+    }
+
     @Override
     public String toString() {
         return "Move{" + "room=" + room + ", collectedItems=" + collectedItems + '}';
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(room, collectedItems);

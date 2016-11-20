@@ -3,18 +3,20 @@ package guru.bytecode.rrp;
 import static java.util.Collections.*;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import static java.util.stream.Collectors.*;
 import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.api.JUnitSoftAssertions;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.rules.Timeout;
 import static org.mockito.Mockito.*;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class QuesterTest {
+    
+    @Rule
+    public final Timeout timeout = new Timeout(1000, TimeUnit.MILLISECONDS);
 
     @Rule
     public final JUnitSoftAssertions softly = new JUnitSoftAssertions();
@@ -34,46 +36,46 @@ public class QuesterTest {
 
     @Test
     public void emptyRoute() {
-        Room startingRoom = mockRoom();
+        Room startRoom = mockRoom();
         Set<Item> itemsToCollect = singleton(mock(Item.class));
 
-        List<Move> route = player1.findRoute(startingRoom, itemsToCollect);
+        List<Move> route = player1.findRoute(startRoom, itemsToCollect);
 
         assertThat(route).isEmpty();
     }
 
     @Test
     public void nothingToCollect() {
-        Room startingRoom = mockRoom();
+        Room startRoom = mockRoom();
 
-        List<Move> route = player1.findRoute(startingRoom, emptySet());
+        List<Move> route = player1.findRoute(startRoom, emptySet());
 
-        assertThat(route).containsOnly(new Move(startingRoom, emptySet()));
+        assertThat(route).containsOnly(new Move(startRoom, emptySet()));
     }
 
     @Test
     public void allItemsAreInStartingRoom() {
         Item item = mock(Item.class);
-        Room startingRoom = mockRoom(item);
+        Room startRoom = mockRoom(item);
         Set<Item> itemsToCollect = singleton(item);
 
-        List<Move> route = player1.findRoute(startingRoom, itemsToCollect);
+        List<Move> route = player1.findRoute(startRoom, itemsToCollect);
 
-        assertThat(route).containsOnly(new Move(startingRoom, itemsToCollect));
+        assertThat(route).containsOnly(new Move(startRoom, itemsToCollect));
     }
 
     @Test
     public void route2() {
         Item item = mock(Item.class);
-        Room startingRoom = mockRoom();
+        Room startRoom = mockRoom();
         Room neighborRoom = mockRoom(item);
-        when(startingRoom.getNeighbors()).thenReturn(singleton(neighborRoom));
+        connect(startRoom, neighborRoom);
         Set<Item> itemsToCollect = singleton(item);
 
-        List<Move> route = player1.findRoute(startingRoom, itemsToCollect);
+        List<Move> route = player1.findRoute(startRoom, itemsToCollect);
 
         assertThat(route).containsExactly(
-                new Move(startingRoom, emptySet()),
+                new Move(startRoom, emptySet()),
                 new Move(neighborRoom, itemsToCollect)
         );
     }
@@ -99,6 +101,19 @@ public class QuesterTest {
     }
 
     @Test
+    public void cycleDetection() {
+        Room startingRoom = mockRoom();
+        Room neighbor1 = mockRoom();
+        connect(startingRoom, neighbor1);
+        connect(neighbor1, startingRoom);
+        Set<Item> itemsToCollect = setOf(mock(Item.class));
+
+        List<Move> route = player1.findRoute(startingRoom, itemsToCollect);
+
+        assertThat(route).isEmpty();
+    }
+
+    @Test
     public void routeWithBackTracking() {
         Item item1 = mock(Item.class);
         Item item2 = mock(Item.class);
@@ -106,12 +121,14 @@ public class QuesterTest {
         Room neighbor1 = mockRoom(item1);
         Room neighbor2 = mockRoom(item2);
         connect(startingRoom, neighbor1, neighbor2);
+        connect(neighbor1, startingRoom);
+        connect(neighbor2, startingRoom);
         Set<Item> itemsToCollect = setOf(item1, item2);
 
         List<Move> route = player1.findRoute(startingRoom, itemsToCollect);
 
         assertThat(route)
-//                .hasSize(4)
+                .hasSize(4)
                 .containsSequence(
                         new Move(startingRoom, emptySet()),
                         new Move(neighbor1, singleton(item1))
