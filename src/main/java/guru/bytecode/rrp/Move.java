@@ -9,6 +9,8 @@ class Move {
     private final Set<Item> collectedItems;
 
     Move(Room room, Set<Item> collectedItems) {
+        Objects.requireNonNull(room);
+        Objects.requireNonNull(collectedItems);
         this.room = room;
         this.collectedItems = collectedItems;
     }

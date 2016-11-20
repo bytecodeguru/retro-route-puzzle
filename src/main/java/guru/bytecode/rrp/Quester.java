@@ -12,9 +12,11 @@ class Quester {
         Objects.requireNonNull(itemsToCollect);
         startingRoom.getItems();
         startingRoom.getNeighbors();
-        return itemsToCollect.isEmpty()
-                ? Collections.singletonList(new Move(startingRoom, itemsToCollect))
-                : Collections.emptyList();
+        if (startingRoom.getItems().containsAll(itemsToCollect)) {
+            return Collections.singletonList(new Move(startingRoom, itemsToCollect)); 
+        } else {
+            return Collections.emptyList();
+        }
     }
 
 }
