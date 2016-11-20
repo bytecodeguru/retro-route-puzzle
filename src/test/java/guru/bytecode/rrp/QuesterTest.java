@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 public class QuesterTest {
     
     @Rule
-    public final Timeout timeout = new Timeout(1000, TimeUnit.MILLISECONDS);
+    public final Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
 
     @Rule
     public final JUnitSoftAssertions softly = new JUnitSoftAssertions();
