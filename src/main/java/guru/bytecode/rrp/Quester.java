@@ -40,10 +40,10 @@ class Quester {
     private LinkedList<Move> findRouteToNextItems(Room startRoom, Set<Item> itemsToCollect) {
         Deque<Room> roomsToVisit = new ArrayDeque<>();
         roomsToVisit.offerFirst(startRoom);
-        return depthFirstSearch(roomsToVisit, itemsToCollect);
+        return breadthFirstSearch(roomsToVisit, itemsToCollect);
     }
-
-    private LinkedList<Move> depthFirstSearch(Deque<Room> roomsToVisit, Set<Item> itemsToCollect) {
+    
+    private LinkedList<Move> breadthFirstSearch(Deque<Room> roomsToVisit, Set<Item> itemsToCollect) {
         LinkedList<Move> route = new LinkedList<>();
         Set<Room> visitedRooms = new HashSet<>();
         do {
