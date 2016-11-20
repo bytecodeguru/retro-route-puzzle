@@ -19,7 +19,7 @@ public class PuzzleTest {
         Room startingRoom = mazeMap.get(0);
         Set<Item> itemsToCollect = Collections.emptySet();
         
-        Quester player1 = new Quester();
+        Quester player1 = new Quester(new BreadthFirstSearch());
         
         List<Move> route = player1.findRoute(startingRoom, itemsToCollect);
 

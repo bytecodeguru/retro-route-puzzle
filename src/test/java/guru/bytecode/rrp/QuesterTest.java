@@ -21,7 +21,7 @@ public class QuesterTest {
     @Rule
     public final JUnitSoftAssertions softly = new JUnitSoftAssertions();
 
-    private final Quester player1 = new Quester();
+    private final Quester player1 = new Quester(new BreadthFirstSearch());
 
     @Test
     public void findRoutePreconditions() {

@@ -11,6 +11,12 @@ import java.util.Set;
 
 class Quester {
 
+    private final Search search;
+
+    Quester(Search search) {
+        this.search = search;
+    }
+
     List<Move> findRoute(Room startRoom, Set<Item> itemsToCollect) {
         Objects.requireNonNull(startRoom);
         Objects.requireNonNull(itemsToCollect);
@@ -40,32 +46,7 @@ class Quester {
     private LinkedList<Move> findRouteToNextItems(Room startRoom, Set<Item> itemsToCollect) {
         Deque<Room> roomsToVisit = new ArrayDeque<>();
         roomsToVisit.offerFirst(startRoom);
-        return breadthFirstSearch(roomsToVisit, itemsToCollect);
-    }
-    
-    private LinkedList<Move> breadthFirstSearch(Deque<Room> roomsToVisit, Set<Item> itemsToCollect) {
-        LinkedList<Move> route = new LinkedList<>();
-        Set<Room> visitedRooms = new HashSet<>();
-        do {
-            Room room = roomsToVisit.pollFirst();
-            visitedRooms.add(room);
-            Set<Item> collectedItems = new HashSet<>(room.getItems());
-            collectedItems.retainAll(itemsToCollect);
-            route.addLast(new Move(room, collectedItems));
-            if (itemsToCollect.removeAll(collectedItems)) {
-                return route;
-            } else {
-                HashSet<Room> neighbors = new HashSet<>(room.getNeighbors());
-                neighbors.removeAll(visitedRooms);
-                if (neighbors.isEmpty()) {
-                    route.removeLast();
-                } else {
-                    roomsToVisit.addAll(neighbors);
-                }
-            }
-        } while (!roomsToVisit.isEmpty());
-
-        return route;
+        return search.findNextMoves(roomsToVisit, itemsToCollect);
     }
 
     private void join(LinkedList<Move> left, LinkedList<Move> right) {
