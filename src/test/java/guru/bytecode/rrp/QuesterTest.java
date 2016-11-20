@@ -1,7 +1,6 @@
 package guru.bytecode.rrp;
 
-import java.util.Collections;
-import java.util.HashSet;
+import static java.util.Collections.*;
 import java.util.List;
 import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,7 +21,10 @@ public class QuesterTest {
     private final Quester player1 = new Quester();
 
     @Mock
-    private Room room;
+    private Room startingRoom;
+    
+    @Mock
+    private Room neighborRoom;
     
     @Mock
     private Item item;
@@ -30,36 +32,49 @@ public class QuesterTest {
     @Test
     public void findRoutePreconditions() {
         softly.assertThatThrownBy(() -> {
-            player1.findRoute(room, null);
+            player1.findRoute(startingRoom, null);
         }).isInstanceOf(NullPointerException.class);
 
         softly.assertThatThrownBy(() -> {
-            player1.findRoute(null, Collections.emptySet());
+            player1.findRoute(null, emptySet());
         }).isInstanceOf(NullPointerException.class);
     }
 
     @Test
     public void emptyRoute() {
-        when(room.getNeighbors()).thenReturn(Collections.emptySet());
-        when(room.getItems()).thenReturn(Collections.emptySet());
-        Set<Item> itemsToCollect = Collections.singleton(item);
-        List<Move> route = player1.findRoute(room, itemsToCollect);
+        when(startingRoom.getNeighbors()).thenReturn(emptySet());
+        when(startingRoom.getItems()).thenReturn(emptySet());
+        Set<Item> itemsToCollect = singleton(item);
+        List<Move> route = player1.findRoute(startingRoom, itemsToCollect);
         assertThat(route).isEmpty();
     }
 
     @Test
     public void nothingToCollect() {
-        Set<Item> nothingToCollect = Collections.emptySet();
-        List<Move> route = player1.findRoute(room, nothingToCollect);
-        assertThat(route).containsOnly(new Move(room, nothingToCollect));
+        Set<Item> nothingToCollect = emptySet();
+        List<Move> route = player1.findRoute(startingRoom, nothingToCollect);
+        assertThat(route).containsOnly(new Move(startingRoom, nothingToCollect));
     }
     
     @Test
     public void allItemsAreInStartingRoom() {
-        Set<Item> itemsToCollect = Collections.singleton(item);
-        when(room.getItems()).thenReturn(itemsToCollect);
-        List<Move> route = player1.findRoute(room, itemsToCollect);
-        assertThat(route).containsOnly(new Move(room, itemsToCollect));
+        Set<Item> itemsToCollect = singleton(item);
+        when(startingRoom.getItems()).thenReturn(itemsToCollect);
+        List<Move> route = player1.findRoute(startingRoom, itemsToCollect);
+        assertThat(route).containsOnly(new Move(startingRoom, itemsToCollect));
+    }
+    
+    @Test
+    public void route2() {
+        Set<Item> itemsToCollect = singleton(item);
+        when(startingRoom.getItems()).thenReturn(emptySet());
+        when(startingRoom.getNeighbors()).thenReturn(singleton(neighborRoom));
+        when(neighborRoom.getItems()).thenReturn(itemsToCollect);
+        List<Move> route = player1.findRoute(startingRoom, itemsToCollect);
+        assertThat(route).containsExactly(
+                new Move(startingRoom, emptySet()),
+                new Move(neighborRoom, itemsToCollect)
+        );
     }
 
 }

@@ -14,6 +14,11 @@ class Move {
         this.room = room;
         this.collectedItems = collectedItems;
     }
+
+    @Override
+    public String toString() {
+        return "Move{" + "room=" + room + ", collectedItems=" + collectedItems + '}';
+    }
     
     @Override
     public int hashCode() {
