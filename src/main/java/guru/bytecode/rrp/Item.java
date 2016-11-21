@@ -1,5 +1,5 @@
 package guru.bytecode.rrp;
 
-class Item {
+interface Item {
     
 }

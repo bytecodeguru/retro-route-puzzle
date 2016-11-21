@@ -17,6 +17,9 @@ public class MoveTest {
 
     @Mock
     private Room room;
+    
+    @Mock
+    private Item item;
 
     @Test
     public void constructorPreconditions() {
@@ -33,7 +36,7 @@ public class MoveTest {
     public void testEquals() {
         Move m1 = new Move(room, Collections.emptySet());
         Move m2 = new Move(room, Collections.emptySet());
-        Move m3 = new Move(room, Collections.singleton(new Item()));
+        Move m3 = new Move(room, Collections.singleton(item));
         Move m4 = new Move(mock(Room.class), Collections.emptySet());
         softly.assertThat(m1.equals(m1)).isTrue();
         softly.assertThat(m1.equals(null)).isFalse();

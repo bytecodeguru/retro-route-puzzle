@@ -4,6 +4,7 @@ import static java.util.Collections.*;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import static java.util.stream.Collectors.*;
 import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -148,6 +149,7 @@ public class QuesterTest {
         return room;
     }
 
+    @SuppressWarnings("unchecked")
     private static <T> Set<T> setOf(T... elements) {
         return Stream.of(elements).collect(toSet());
     }
