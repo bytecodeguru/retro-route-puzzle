@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
 public class RetroRoutePuzzle {
 
@@ -62,8 +64,8 @@ public class RetroRoutePuzzle {
                 startRoomId,
                 itemsToCollect
         );
-
-        route.stream().forEach(System.out::println);
+        
+        new CsvRoute(route).printTo(System.out);
 
     }
 

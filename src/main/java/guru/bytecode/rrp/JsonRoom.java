@@ -18,7 +18,6 @@ class JsonRoom implements Room {
     private final Integer south;
     private final Integer west;
     private final Integer east;
-    private final List<JsonItem> objects;
     private final Set<Room> neighbors;
     private final Set<Item> items;
 
@@ -38,12 +37,17 @@ class JsonRoom implements Room {
         this.south = south;
         this.west = west;
         this.east = east;
-        this.objects = Objects.requireNonNull(objects);
-        items = objects.stream().collect(toSet());
+        items = Objects.requireNonNull(objects).stream().collect(toSet());
         neighbors = new HashSet<>();
     }
 
-    Integer getId() {
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Integer getId() {
         return id;
     }
 

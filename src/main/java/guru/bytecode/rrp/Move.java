@@ -19,6 +19,10 @@ class Move {
         return room;
     }
 
+    Set<Item> getCollectedItems() {
+        return collectedItems;
+    }
+
     @Override
     public String toString() {
         return "Move{" + "room=" + room + ", collectedItems=" + collectedItems + '}';
