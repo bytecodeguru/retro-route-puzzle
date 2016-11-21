@@ -65,8 +65,8 @@ Output
 
 Additional Goals
 ----------------
-  - [*] TDD approach.
-  - [*] Build a Docker container with runnable code inside so that we can mount a volume in it and test on different maps.
+  - [x] TDD approach.
+  - [x] Build a Docker container with runnable code inside so that we can mount a volume in it and test on different maps.
 
 Build instructions
 ------------------
@@ -86,7 +86,7 @@ Usage
 
 Example:
 ```
-java -jar target/retro-route-puzzle-1.0-SNAPSHOT.jar -m map.json -r 2 -i "Knife" "Potted Plant"
+java -jar target/retro-route-puzzle-<version>.jar -m map.json -r 2 -i "Knife" "Potted Plant"
 ```
 
 Example using Docker:
@@ -98,4 +98,4 @@ Implementation notes
 --------------------
 
 The search algorithm is a greedy multi step graph visit, where each step uses Breadth First Search or Depth First Search.
-In either case the complexity is *O(R)*, but in general BFS should result in shorter routes.
+In either case the complexity is _O(R)_ where _R_ is the number of rooms, but in general BFS should result in shorter routes.
