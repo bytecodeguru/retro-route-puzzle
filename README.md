@@ -66,4 +66,36 @@ Output
 Additional Goals
 ----------------
   - [*] TDD approach.
-  - [ ] Build a Docker container with runnable code inside so that we can mount a volume in it and test on different maps.
+  - [*] Build a Docker container with runnable code inside so that we can mount a volume in it and test on different maps.
+
+Build instructions
+------------------
+
+To build a runnable jar:
+```
+mvn clean package
+```
+
+To build a runnable docker image:
+```
+mvn clean package docker:build
+```
+
+Usage
+-----
+
+Example:
+```
+java -jar target/retro-route-puzzle-1.0-SNAPSHOT.jar -m map.json -r 2 -i "Knife" "Potted Plant"
+```
+
+Example using Docker:
+```
+docker run -v `pwd`:`pwd` -w `pwd` retro-route-puzzle -m map.json -r 2 -i "Knife" "Potted Plant"
+```
+
+Implementation notes
+--------------------
+
+The search algorithm is a greedy multi step graph visit, where each step uses Breadth First Search or Depth First Search.
+In either case the complexity is *O(R)*, but in general BFS should result in shorter routes.
